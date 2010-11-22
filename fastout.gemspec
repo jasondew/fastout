@@ -6,11 +6,11 @@ Gem::Specification.new do |s|
   s.name        = "fastout"
   s.version     = Fastout::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["TODO: Write your name"]
-  s.email       = ["TODO: Write your email address"]
+  s.authors     = ["Jason Dew"]
+  s.email       = ["jason.dew@gmail.com"]
   s.homepage    = "http://rubygems.org/gems/fastout"
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Detect outliers in high-dimension data sets}
+  s.description = %q{Detect outliers in high-dimension data sets using the FASTOUT algorithm by Foss et. al}
 
   s.rubyforge_project = "fastout"
 
