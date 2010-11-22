@@ -1,3 +1,1 @@
-module Fastout
-  # Your code goes here...
-end
+require "fastout/ranker"
