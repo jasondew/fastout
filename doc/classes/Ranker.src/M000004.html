@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File lib/fastout/ranker.rb, line 112</span>
+  <pre><span class="ruby-comment cmt"># File lib/fastout/ranker.rb, line 113</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">calculate_theta</span> <span class="ruby-identifier">sample</span>, <span class="ruby-identifier">k</span>, <span class="ruby-identifier">n</span>, <span class="ruby-identifier">q</span>
     <span class="ruby-identifier">s</span> = <span class="ruby-identifier">ranked_outliers</span> <span class="ruby-identifier">sample</span>, <span class="ruby-identifier">k</span>, <span class="ruby-identifier">q</span>
     <span class="ruby-identifier">theta</span> = <span class="ruby-identifier">points</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-value">0</span>) {<span class="ruby-operator">|</span><span class="ruby-identifier">sum</span>, <span class="ruby-identifier">point</span><span class="ruby-operator">|</span> <span class="ruby-identifier">point</span>.<span class="ruby-identifier">score</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">n</span> <span class="ruby-value">? </span><span class="ruby-identifier">sum</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">sum</span> }
