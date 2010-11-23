@@ -92,8 +92,13 @@ module Fastout
         end
       end
 
-      context "#ranked_outliers" do
+      context "#optimized_ranking" do
+        it "should find the optimal values for k and q" do
+          @ranker.optimized_ranking(2, 10, 2).map(&:id).should == [3, 2, 1, 0]
+        end
+      end
 
+      context "#ranked_outliers" do
         it "should compute the necessary parameters and return the points sorted by score" do
           mock(@ranker).compute_bin_count(42) { :bin_count }
           mock(@ranker).compute_bin_widths(42, :bin_count) { :bin_widths }
@@ -106,10 +111,9 @@ module Fastout
       end
 
       context "#score_points_from_a_random_set_of_attributes!" do
-
         it "should pick a random set of attributes and cycle through the points" do
           mock(@ranker).random_attribute_indexes(5) { [2, 0] }
-          mock(@ranker).find_neighbors(is_a(Ranker::Point), [2, 0], [2, 0]) { [] }.times(4)
+          mock(@ranker).cluster_neighbors(is_a(Ranker::Point), is_a(Fixnum), [2, 0], [2, 0]) { [] }.times(4)
 
           @ranker.score_points_from_a_random_set_of_attributes!(5, [0, 1, 2])
         end
@@ -119,19 +123,19 @@ module Fastout
         it("should give me back the correct number of indexes") { @ranker.random_attribute_indexes(3).size.should == 3 }
       end
 
-      context "#find_neighbors" do
-        it "should call recursively_find_neighbors" do
-          mock(@ranker).recursively_find_neighbors(:point, :attribute_indexes, :bin_widths, [])
+      context "#cluster_neighbors" do
+        it "should call recursively_cluster_neighbors" do
+          mock(@ranker).recursively_cluster_neighbors(:point, :cluster, :attribute_indexes, :bin_widths, [])
 
-          @ranker.find_neighbors :point, :attribute_indexes, :bin_widths
+          @ranker.cluster_neighbors :point, :cluster, :attribute_indexes, :bin_widths
         end
       end
 
-      context "#recursively_find_neighbors" do
+      context "#recursively_cluster_neighbors" do
 
         it "should return its neighbors when there are no more unclustered points" do
           mock(@ranker).unclustered_points { [] }
-          @ranker.recursively_find_neighbors(:point, :attribute_indexes, :bin_widths, :neighbors).should == :neighbors
+          @ranker.recursively_cluster_neighbors(:point, :cluster, :attribute_indexes, :bin_widths, :neighbors).should == :neighbors
         end
 
         it "should return its neighbors if it doesn't find any new neighbors" do
@@ -139,18 +143,54 @@ module Fastout
           mock(@ranker).unclustered_points { [unclustered_point] }
           point = mock!.in_the_neighborhood_of?(unclustered_point, :attribute_indexes, :bin_widths) { false }.subject
 
-          @ranker.recursively_find_neighbors(point, :attribute_indexes, :bin_widths, :neighbors).should == :neighbors
+          @ranker.recursively_cluster_neighbors(point, :cluster, :attribute_indexes, :bin_widths, :neighbors).should == :neighbors
         end
 
         it "should call itself if it finds a new neighbor" do
-          point = mock!.in_the_neighborhood_of?(:unclustered_point, :attribute_indexes, :bin_widths) { true }.subject
-          mock(@ranker).recursively_find_neighbors(point, :attribute_indexes, :bin_widths, anything).times(2)
+          @called = false
+          unclustered_point = Ranker::Point.new
+          mock(unclustered_point).cluster=(:cluster)
 
-          @ranker.recursively_find_neighbors point, :attribute_indexes, :bin_widths, []
+          mock(@ranker).unclustered_points do
+            if @called
+              []
+            else
+              @called = true
+              [unclustered_point]
+            end
+          end.times(2)
+
+          point = mock!.in_the_neighborhood_of?(unclustered_point, :attribute_indexes, :bin_widths) { true }.subject
+
+          @ranker.recursively_cluster_neighbors(point, :cluster, :attribute_indexes, :bin_widths, []).should == [unclustered_point]
         end
       end
 
       context "#unclustered_points" do
+
+        it "should find only the points that aren't clustered" do
+          mock(@ranker).points do
+            [mock!.clustered? { true }.subject,
+             mock!.clustered? { true }.subject,
+             mock!.clustered? { false }.subject]
+          end
+
+          @ranker.unclustered_points.size == 2
+        end
+
+      end
+
+      context "#calculate_theta" do
+
+        it "should call #ranked_outliers and find theta" do
+          mock(@ranker).ranked_outliers(:sample, :k, :q) { :s }
+          mock(@ranker).points { [mock!.score { :n }.subject,
+                                  mock!.score { :not_n }.subject,
+                                  mock!.score { :not_n }.subject,
+                                  mock!.score { :n }.subject] }
+          @ranker.calculate_theta(:sample, :k, :n, :q).should == [2, :s]
+        end
+
       end
 
       context "#compute_minimums_and_maximums" do
@@ -164,6 +204,8 @@ module Fastout
         it("should be equal to 4 when Q=1") { @ranker.compute_bin_count(1).should == 4 }
         it("should be equal to 2 when Q=2") { @ranker.compute_bin_count(2).should == 2 }
         it("should be equal to 2 when Q=3") { @ranker.compute_bin_count(3).should == 2 }
+        it("should be equal to 2 when Q=4") { @ranker.compute_bin_count(4).should == 2 }
+        it("should be equal to 2 when Q=5") { @ranker.compute_bin_count(5).should == 2 }
       end
 
       context "#compute_bin_widths" do

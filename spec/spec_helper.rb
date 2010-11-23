@@ -4,6 +4,6 @@ Bundler.setup
 
 require "fastout"
 
-Rspec.configure do |config|
+RSpec.configure do |config|
   config.mock_with :rr
 end

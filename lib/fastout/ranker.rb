@@ -84,7 +84,7 @@ class Ranker
     max_q = n / 4
     step_q = 10
     last_theta = n
-    theta, s = calculate_theta(sample, k, q)
+    theta, s = calculate_theta(sample, k, n, q)
 
     while (theta > target or theta < last_theta or q < max_q) do
       return s if (theta <= target)
@@ -100,10 +100,20 @@ class Ranker
         last_theta = theta
       end
 
-      theta, s = calculate_theta(sample, k, q)
+      theta, s = calculate_theta(sample, k, n, q)
     end
 
     s
+  end
+
+  # find and rank the points by their outlier score and
+  # determine theta (the number of points with an outlier score
+  # of +n+)
+  def calculate_theta sample, k, n, q
+    s = ranked_outliers sample, k, q
+    theta = points.inject(0) {|sum, point| point.score == n ? sum + 1 : sum }
+
+    [theta, s]
   end
 
   # chooses +k+ random attributes with an average of +q+ data points
@@ -116,7 +126,8 @@ class Ranker
     # assign points to the attribute bins
     assign_points_to_bins! bin_widths, bin_count
 
-    1.upto(sample_size) { score_points_from_a_random_set_of_attributes! k, bin_widths }
+    1.upto(sample_size) {
+      score_points_from_a_random_set_of_attributes! k, bin_widths }
 
     points.sort_by(&:score)
   end
@@ -132,13 +143,9 @@ class Ranker
       next if point.clustered?
 
       point.cluster = (cluster += 1)
-      neighbors = find_neighbors point, attribute_indexes, bin_widths
+      neighbors = cluster_neighbors point, cluster, attribute_indexes, bin_widths
 
-      if neighbors.empty?
-        point.uncluster!
-      else
-        neighbors.map {|neighborhood_point| neighborhood_point.cluster = cluster }
-      end
+      point.uncluster!  if neighbors.empty?
     end
 
     points.each do |point|
@@ -156,12 +163,12 @@ class Ranker
   # find all unclustered points that are neighbors of +point+ on
   # *all* selected attributes or neighbors in the neighborhood
   # of +point+; find recursively until no additions can be made
-  def find_neighbors point, attribute_indexes, bin_widths
-    recursively_find_neighbors point, attribute_indexes, bin_widths, []
+  def cluster_neighbors point, cluster, attribute_indexes, bin_widths
+    recursively_cluster_neighbors point, cluster, attribute_indexes, bin_widths, []
   end
 
-  # recursive step of #find_neighbors
-  def recursively_find_neighbors point, attribute_indexes, bin_widths, neighbors
+  # recursive step of #cluster_neighbors
+  def recursively_cluster_neighbors point, cluster, attribute_indexes, bin_widths, neighbors
     fruitful = false
 
     unclustered_points.each do |unclustered_point|
@@ -169,11 +176,12 @@ class Ranker
                   unclustered_point.neighbor_of_any?(neighbors, attribute_indexes, bin_widths)
 
       fruitful = true
+      unclustered_point.cluster = cluster
       neighbors << unclustered_point
     end
 
     if fruitful
-      recursively_find_neighbors point, attribute_indexes, neighbors
+      recursively_cluster_neighbors point, cluster, attribute_indexes, bin_widths, neighbors
     else
       neighbors
     end
@@ -181,17 +189,7 @@ class Ranker
 
   # find all of the points that don't already belong to a cluster
   def unclustered_points
-    []
-  end
-
-  # find and rank the points by their outlier score and
-  # determine theta (the number of points with an outlier score
-  # of +n+)
-  def calculate_theta sample, k, n, q
-    s = ranked_outliers sample, k, q
-    theta = points.inject(0) {|sum, point| point.score == n ? sum + 1 : sum }
-
-    [theta, s]
+    points.select {|point| not point.clustered? }
   end
 
   # assign each of the data points to a bin based on the given +bin_widths+,
@@ -237,7 +235,8 @@ class Ranker
 
   # compute the number of bins for a given +q+
   def compute_bin_count q
-    (@data.size / q.to_f).ceil
+    count = (@data.size / q.to_f).ceil
+    count < 2 ? 2 : count
   end
 
 end
