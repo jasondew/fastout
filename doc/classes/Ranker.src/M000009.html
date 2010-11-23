@@ -5,14 +5,29 @@
 
 <html>
 <head>
-  <title>unclustered_points (Ranker)</title>
+  <title>recursively_cluster_neighbors (Ranker)</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File lib/fastout/ranker.rb, line 183</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unclustered_points</span>
-    []
+  <pre><span class="ruby-comment cmt"># File lib/fastout/ranker.rb, line 171</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">recursively_cluster_neighbors</span> <span class="ruby-identifier">point</span>, <span class="ruby-identifier">cluster</span>, <span class="ruby-identifier">attribute_indexes</span>, <span class="ruby-identifier">bin_widths</span>, <span class="ruby-identifier">neighbors</span>
+    <span class="ruby-identifier">fruitful</span> = <span class="ruby-keyword kw">false</span>
+
+    <span class="ruby-identifier">unclustered_points</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">unclustered_point</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">point</span>.<span class="ruby-identifier">in_the_neighborhood_of?</span>(<span class="ruby-identifier">unclustered_point</span>, <span class="ruby-identifier">attribute_indexes</span>, <span class="ruby-identifier">bin_widths</span>) <span class="ruby-keyword kw">or</span>
+                  <span class="ruby-identifier">unclustered_point</span>.<span class="ruby-identifier">neighbor_of_any?</span>(<span class="ruby-identifier">neighbors</span>, <span class="ruby-identifier">attribute_indexes</span>, <span class="ruby-identifier">bin_widths</span>)
+
+      <span class="ruby-identifier">fruitful</span> = <span class="ruby-keyword kw">true</span>
+      <span class="ruby-identifier">unclustered_point</span>.<span class="ruby-identifier">cluster</span> = <span class="ruby-identifier">cluster</span>
+      <span class="ruby-identifier">neighbors</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">unclustered_point</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">fruitful</span>
+      <span class="ruby-identifier">recursively_cluster_neighbors</span> <span class="ruby-identifier">point</span>, <span class="ruby-identifier">cluster</span>, <span class="ruby-identifier">attribute_indexes</span>, <span class="ruby-identifier">bin_widths</span>, <span class="ruby-identifier">neighbors</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">neighbors</span>
+    <span class="ruby-keyword kw">end</span>
   <span class="ruby-keyword kw">end</span></pre>
 </body>
 </html>

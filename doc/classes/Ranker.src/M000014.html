@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File lib/fastout/ranker.rb, line 232</span>
+  <pre><span class="ruby-comment cmt"># File lib/fastout/ranker.rb, line 230</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compute_bin_widths</span> <span class="ruby-identifier">q</span>, <span class="ruby-identifier">bin_count</span>
     (<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-ivar">@data</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">size</span>).<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">attribute_index</span><span class="ruby-operator">|</span>
       (<span class="ruby-ivar">@maximums</span>[<span class="ruby-identifier">attribute_index</span>] <span class="ruby-operator">-</span> <span class="ruby-ivar">@minimums</span>[<span class="ruby-identifier">attribute_index</span>]) <span class="ruby-operator">/</span> <span class="ruby-identifier">bin_count</span>.<span class="ruby-identifier">to_f</span>

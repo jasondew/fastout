@@ -17,7 +17,7 @@
     <span class="ruby-identifier">max_q</span> = <span class="ruby-identifier">n</span> <span class="ruby-operator">/</span> <span class="ruby-value">4</span>
     <span class="ruby-identifier">step_q</span> = <span class="ruby-value">10</span>
     <span class="ruby-identifier">last_theta</span> = <span class="ruby-identifier">n</span>
-    <span class="ruby-identifier">theta</span>, <span class="ruby-identifier">s</span> = <span class="ruby-identifier">calculate_theta</span>(<span class="ruby-identifier">sample</span>, <span class="ruby-identifier">k</span>, <span class="ruby-identifier">q</span>)
+    <span class="ruby-identifier">theta</span>, <span class="ruby-identifier">s</span> = <span class="ruby-identifier">calculate_theta</span>(<span class="ruby-identifier">sample</span>, <span class="ruby-identifier">k</span>, <span class="ruby-identifier">n</span>, <span class="ruby-identifier">q</span>)
 
     <span class="ruby-keyword kw">while</span> (<span class="ruby-identifier">theta</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">target</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">theta</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">last_theta</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">q</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">max_q</span>) <span class="ruby-keyword kw">do</span>
       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span> <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">theta</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-identifier">target</span>)
@@ -33,7 +33,7 @@
         <span class="ruby-identifier">last_theta</span> = <span class="ruby-identifier">theta</span>
       <span class="ruby-keyword kw">end</span>
 
-      <span class="ruby-identifier">theta</span>, <span class="ruby-identifier">s</span> = <span class="ruby-identifier">calculate_theta</span>(<span class="ruby-identifier">sample</span>, <span class="ruby-identifier">k</span>, <span class="ruby-identifier">q</span>)
+      <span class="ruby-identifier">theta</span>, <span class="ruby-identifier">s</span> = <span class="ruby-identifier">calculate_theta</span>(<span class="ruby-identifier">sample</span>, <span class="ruby-identifier">k</span>, <span class="ruby-identifier">n</span>, <span class="ruby-identifier">q</span>)
     <span class="ruby-keyword kw">end</span>
 
     <span class="ruby-identifier">s</span>

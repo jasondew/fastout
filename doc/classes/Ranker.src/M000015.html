@@ -10,9 +10,10 @@
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File lib/fastout/ranker.rb, line 239</span>
+  <pre><span class="ruby-comment cmt"># File lib/fastout/ranker.rb, line 237</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compute_bin_count</span> <span class="ruby-identifier">q</span>
-    (<span class="ruby-ivar">@data</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">/</span> <span class="ruby-identifier">q</span>.<span class="ruby-identifier">to_f</span>).<span class="ruby-identifier">ceil</span>
+    <span class="ruby-identifier">count</span> = (<span class="ruby-ivar">@data</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">/</span> <span class="ruby-identifier">q</span>.<span class="ruby-identifier">to_f</span>).<span class="ruby-identifier">ceil</span>
+    <span class="ruby-identifier">count</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">2</span> <span class="ruby-operator">?</span> <span class="ruby-value">2</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">count</span>
   <span class="ruby-keyword kw">end</span></pre>
 </body>
 </html>

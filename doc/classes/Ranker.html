@@ -108,19 +108,19 @@ Knowledge and Information Systems, 2010.
       <div class="name-list">
       <a href="#M000011">assign_points_to_bins!</a>&nbsp;&nbsp;
       <a href="#M000012">bin_index</a>&nbsp;&nbsp;
-      <a href="#M000010">calculate_theta</a>&nbsp;&nbsp;
+      <a href="#M000004">calculate_theta</a>&nbsp;&nbsp;
+      <a href="#M000008">cluster_neighbors</a>&nbsp;&nbsp;
       <a href="#M000015">compute_bin_count</a>&nbsp;&nbsp;
       <a href="#M000014">compute_bin_widths</a>&nbsp;&nbsp;
       <a href="#M000013">compute_minimums_and_maximums</a>&nbsp;&nbsp;
-      <a href="#M000007">find_neighbors</a>&nbsp;&nbsp;
       <a href="#M000002">new</a>&nbsp;&nbsp;
       <a href="#M000003">optimized_ranking</a>&nbsp;&nbsp;
       <a href="#M000001">pointify</a>&nbsp;&nbsp;
-      <a href="#M000006">random_attribute_indexes</a>&nbsp;&nbsp;
-      <a href="#M000004">ranked_outliers</a>&nbsp;&nbsp;
-      <a href="#M000008">recursively_find_neighbors</a>&nbsp;&nbsp;
-      <a href="#M000005">score_points_from_a_random_set_of_attributes!</a>&nbsp;&nbsp;
-      <a href="#M000009">unclustered_points</a>&nbsp;&nbsp;
+      <a href="#M000007">random_attribute_indexes</a>&nbsp;&nbsp;
+      <a href="#M000005">ranked_outliers</a>&nbsp;&nbsp;
+      <a href="#M000009">recursively_cluster_neighbors</a>&nbsp;&nbsp;
+      <a href="#M000006">score_points_from_a_random_set_of_attributes!</a>&nbsp;&nbsp;
+      <a href="#M000010">unclustered_points</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -250,12 +250,12 @@ assign each of the data points to a bin based on the given
         </div>
       </div>
 
-      <div id="method-M000010" class="method-detail">
-        <a name="M000010"></a>
+      <div id="method-M000004" class="method-detail">
+        <a name="M000004"></a>
 
         <div class="method-heading">
-          <a href="Ranker.src/M000010.html" target="Code" class="method-signature"
-            onclick="popupCode('Ranker.src/M000010.html');return false;">
+          <a href="Ranker.src/M000004.html" target="Code" class="method-signature"
+            onclick="popupCode('Ranker.src/M000004.html');return false;">
           <span class="method-name">calculate_theta</span><span class="method-args">(sample, k, n, q)</span>
           </a>
         </div>
@@ -264,6 +264,25 @@ assign each of the data points to a bin based on the given
           <p>
 find and rank the points by their outlier score and determine theta (the
 number of points with an outlier score of <tt>n</tt>)
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000008" class="method-detail">
+        <a name="M000008"></a>
+
+        <div class="method-heading">
+          <a href="Ranker.src/M000008.html" target="Code" class="method-signature"
+            onclick="popupCode('Ranker.src/M000008.html');return false;">
+          <span class="method-name">cluster_neighbors</span><span class="method-args">(point, cluster, attribute_indexes, bin_widths)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+find all unclustered points that are neighbors of <tt>point</tt> on
+<b>all</b> selected attributes or neighbors in the neighborhood of
+<tt>point</tt>; find recursively until no additions can be made
 </p>
         </div>
       </div>
@@ -316,25 +335,6 @@ determine the widths of the bins based on <tt>q</tt>
         </div>
       </div>
 
-      <div id="method-M000007" class="method-detail">
-        <a name="M000007"></a>
-
-        <div class="method-heading">
-          <a href="Ranker.src/M000007.html" target="Code" class="method-signature"
-            onclick="popupCode('Ranker.src/M000007.html');return false;">
-          <span class="method-name">find_neighbors</span><span class="method-args">(point, attribute_indexes, bin_widths)</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-find all unclustered points that are neighbors of <tt>point</tt> on
-<b>all</b> selected attributes or neighbors in the neighborhood of
-<tt>point</tt>; find recursively until no additions can be made
-</p>
-        </div>
-      </div>
-
       <div id="method-M000003" class="method-detail">
         <a name="M000003"></a>
 
@@ -353,12 +353,12 @@ searches the parameter space to find the optimized values of <tt>k</tt> and
         </div>
       </div>
 
-      <div id="method-M000006" class="method-detail">
-        <a name="M000006"></a>
+      <div id="method-M000007" class="method-detail">
+        <a name="M000007"></a>
 
         <div class="method-heading">
-          <a href="Ranker.src/M000006.html" target="Code" class="method-signature"
-            onclick="popupCode('Ranker.src/M000006.html');return false;">
+          <a href="Ranker.src/M000007.html" target="Code" class="method-signature"
+            onclick="popupCode('Ranker.src/M000007.html');return false;">
           <span class="method-name">random_attribute_indexes</span><span class="method-args">(number)</span>
           </a>
         </div>
@@ -370,12 +370,12 @@ randomly choose <tt>number</tt> of attribute indexes
         </div>
       </div>
 
-      <div id="method-M000004" class="method-detail">
-        <a name="M000004"></a>
+      <div id="method-M000005" class="method-detail">
+        <a name="M000005"></a>
 
         <div class="method-heading">
-          <a href="Ranker.src/M000004.html" target="Code" class="method-signature"
-            onclick="popupCode('Ranker.src/M000004.html');return false;">
+          <a href="Ranker.src/M000005.html" target="Code" class="method-signature"
+            onclick="popupCode('Ranker.src/M000005.html');return false;">
           <span class="method-name">ranked_outliers</span><span class="method-args">(sample_size, k, q)</span>
           </a>
         </div>
@@ -388,29 +388,29 @@ points in each bin <tt>sample</tt> times to determine outliers
         </div>
       </div>
 
-      <div id="method-M000008" class="method-detail">
-        <a name="M000008"></a>
+      <div id="method-M000009" class="method-detail">
+        <a name="M000009"></a>
 
         <div class="method-heading">
-          <a href="Ranker.src/M000008.html" target="Code" class="method-signature"
-            onclick="popupCode('Ranker.src/M000008.html');return false;">
-          <span class="method-name">recursively_find_neighbors</span><span class="method-args">(point, attribute_indexes, bin_widths, neighbors)</span>
+          <a href="Ranker.src/M000009.html" target="Code" class="method-signature"
+            onclick="popupCode('Ranker.src/M000009.html');return false;">
+          <span class="method-name">recursively_cluster_neighbors</span><span class="method-args">(point, cluster, attribute_indexes, bin_widths, neighbors)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-recursive step of <a href="Ranker.html#M000007">find_neighbors</a>
+recursive step of <a href="Ranker.html#M000008">cluster_neighbors</a>
 </p>
         </div>
       </div>
 
-      <div id="method-M000005" class="method-detail">
-        <a name="M000005"></a>
+      <div id="method-M000006" class="method-detail">
+        <a name="M000006"></a>
 
         <div class="method-heading">
-          <a href="Ranker.src/M000005.html" target="Code" class="method-signature"
-            onclick="popupCode('Ranker.src/M000005.html');return false;">
+          <a href="Ranker.src/M000006.html" target="Code" class="method-signature"
+            onclick="popupCode('Ranker.src/M000006.html');return false;">
           <span class="method-name">score_points_from_a_random_set_of_attributes!</span><span class="method-args">(number_of_attributes_to_choose, all_bin_widths)</span>
           </a>
         </div>
@@ -423,12 +423,12 @@ the points
         </div>
       </div>
 
-      <div id="method-M000009" class="method-detail">
-        <a name="M000009"></a>
+      <div id="method-M000010" class="method-detail">
+        <a name="M000010"></a>
 
         <div class="method-heading">
-          <a href="Ranker.src/M000009.html" target="Code" class="method-signature"
-            onclick="popupCode('Ranker.src/M000009.html');return false;">
+          <a href="Ranker.src/M000010.html" target="Code" class="method-signature"
+            onclick="popupCode('Ranker.src/M000010.html');return false;">
           <span class="method-name">unclustered_points</span><span class="method-args">()</span>
           </a>
         </div>
