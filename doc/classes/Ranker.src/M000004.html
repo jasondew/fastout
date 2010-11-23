@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>ranked_outliers (Ranker)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/fastout/ranker.rb, line 111</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ranked_outliers</span> <span class="ruby-identifier">sample_size</span>, <span class="ruby-identifier">k</span>, <span class="ruby-identifier">q</span>
+    <span class="ruby-comment cmt"># determine number of bins and their widths</span>
+    <span class="ruby-identifier">bin_count</span> =  <span class="ruby-identifier">compute_bin_count</span>(<span class="ruby-identifier">q</span>)
+    <span class="ruby-identifier">bin_widths</span> = <span class="ruby-identifier">compute_bin_widths</span>(<span class="ruby-identifier">q</span>, <span class="ruby-identifier">bin_count</span>)
+
+    <span class="ruby-comment cmt"># assign points to the attribute bins</span>
+    <span class="ruby-identifier">assign_points_to_bins!</span> <span class="ruby-identifier">bin_widths</span>, <span class="ruby-identifier">bin_count</span>
+
+    <span class="ruby-value">1</span>.<span class="ruby-identifier">upto</span>(<span class="ruby-identifier">sample_size</span>) { <span class="ruby-identifier">score_points_from_a_random_set_of_attributes!</span> <span class="ruby-identifier">k</span>, <span class="ruby-identifier">bin_widths</span> }
+
+    <span class="ruby-identifier">points</span>.<span class="ruby-identifier">sort_by</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">:score</span>)
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>
