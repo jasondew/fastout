@@ -1,4 +1,5 @@
 require "spec_helper"
+require "fastercsv"
 
 module Fastout
 
@@ -94,7 +95,7 @@ module Fastout
 
       context "#optimized_ranking" do
         it "should find the optimal values for k and q" do
-          @ranker.optimized_ranking(2, 10, 2).map(&:id).should == [3, 2, 1, 0]
+          @ranker.optimized_ranking(10, 5, 1).map(&:id).should == [3, 2, 1, 0]
         end
       end
 
@@ -104,7 +105,7 @@ module Fastout
           mock(@ranker).compute_bin_widths(42, :bin_count) { :bin_widths }
           mock(@ranker).assign_points_to_bins!(:bin_widths, :bin_count)
           mock(@ranker).score_points_from_a_random_set_of_attributes!(5, :bin_widths).times(100)
-          mock(@ranker.points).sort_by { :answer }
+          mock(@ranker.points).sort_by { mock!.reverse { :answer }.subject }
 
           @ranker.ranked_outliers(100, 5, 42).should == :answer
         end
@@ -233,6 +234,17 @@ module Fastout
         end
       end
 
+    end
+
+    context "given a somewhat non-trivially dataset" do
+
+      it "should find the outliers" do
+        # data from Exploiting Nonlinear Recurrence and Fractal Scaling Properties for Voice Disorder Detection', Little MA, McSharry PE, Roberts SJ, Costello DAE, Moroz IM. BioMedical Engineering OnLine 2007, 6:23 (26 June 2007)
+        data = FasterCSV.read("spec/parkinsons.csv").map {|row| row.map {|datum| datum = datum.to_f } }
+        ranker = Ranker.new data
+
+        ranker.optimized_ranking(5, 5).size.should == 195
+      end
     end
 
   end

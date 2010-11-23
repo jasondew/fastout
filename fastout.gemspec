@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "autotest-fsevent"
   s.add_development_dependency "autotest-growl"
   s.add_development_dependency "redgreen"
+  s.add_development_dependency "fastercsv"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

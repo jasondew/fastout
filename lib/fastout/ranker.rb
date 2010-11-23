@@ -45,8 +45,8 @@ class Ranker
         return false if (bins[attribute_index] - point.bins[attribute_index]).abs > 1
       end
 
-      attribute_indexes.each do |attribute_index|
-        return false if (attributes[attribute_index] - point.attributes[attribute_index]) > (neighborhoods[attribute_index] / 2.0)
+      attribute_indexes.each_with_index do |attribute_index, neighborhood_index|
+        return false if (attributes[attribute_index] - point.attributes[attribute_index]) > (neighborhoods[neighborhood_index] / 2.0)
       end
 
       true
@@ -77,8 +77,10 @@ class Ranker
   end
 
   # searches the parameter space to find the optimized values of +k+ and +q+
-  # using +sample+ samples at each iteration
-  def optimized_ranking target, sample, n
+  # * +theta_target+ is the maximum acceptable value of theta, default is 1
+  # * +sample+ is the number of iterations to perform in estimating the parameters
+  # * +n+ is the number of points to rank
+  def optimized_ranking sample, n, theta_target=1
     k = 3
     q = 5
     max_q = n / 4
@@ -86,8 +88,8 @@ class Ranker
     last_theta = n
     theta, s = calculate_theta(sample, k, n, q)
 
-    while (theta > target or theta < last_theta or q < max_q) do
-      return s if (theta <= target)
+    while (theta > theta_target or theta < last_theta or q < max_q) do
+      return s if (theta <= theta_target)
 
       if (theta >= last_theta)
         # effectiveness declining so try next k
@@ -106,9 +108,8 @@ class Ranker
     s
   end
 
-  # find and rank the points by their outlier score and
-  # determine theta (the number of points with an outlier score
-  # of +n+)
+  # find and rank the points by their outlier score and determine
+  # theta (the number of points with an outlier score of +n+)
   def calculate_theta sample, k, n, q
     s = ranked_outliers sample, k, q
     theta = points.inject(0) {|sum, point| point.score == n ? sum + 1 : sum }
@@ -129,7 +130,7 @@ class Ranker
     1.upto(sample_size) {
       score_points_from_a_random_set_of_attributes! k, bin_widths }
 
-    points.sort_by(&:score)
+    points.sort_by(&:score).reverse
   end
 
   # pick a random set of attributes and compute the outlier score
