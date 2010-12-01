@@ -9,7 +9,7 @@
 module Fastout
   class Ranker
 
-    class Point
+    class Point #:nodoc:
 
       @@next_id = 0
 
